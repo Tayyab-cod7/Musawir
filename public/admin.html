@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wing System - Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6C63FF;
+            --primary-dark: #5A52CC;
+            --text-dark: #2A2D3E;
+            --text-light: #7C8092;
+            --bg-light: #F0F2F9;
+            --bg-white: #ffffff;
+            --border-color: #E1E5EE;
+            --error-color: #dc3545;
+            --success-color: #28a745;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            min-height: 100vh;
+        }
+
+        .admin-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background: var(--bg-white);
+            padding: 2rem;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .logo-container h2 {
+            color: var(--primary-color);
+            margin-top: 1rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            color: var(--text-light);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Table Styles */
+        .table-container {
+            background: var(--bg-white);
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .users-table th {
+            background: var(--bg-light);
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .users-table tr:hover {
+            background: var(--bg-light);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-danger {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+        /* Messages */
+        .message {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .admin-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <h2>Wing System</h2>
+                <p>Admin Panel</p>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" onclick="showSection('dashboard')">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('users')">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div id="errorMessage" class="message error-message"></div>
+            <div id="successMessage" class="message success-message"></div>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard-section">
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard Overview</h1>
+                    <button class="btn btn-primary" onclick="refreshData()">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Users</h3>
+                        <div class="value" id="totalUsers">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Today</h3>
+                        <div class="value" id="activeUsers">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Referrals</h3>
+                        <div class="value" id="totalReferrals">0</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="users-section" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">User Management</h1>
+                    <button class="btn btn-primary" onclick="fetchUsers()">
+                        <i class="fas fa-sync"></i> Refresh Users
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>Phone Number</th>
+                                <th>Referral Code</th>
+                                <th>Referred By</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- User data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Add modal for password confirmation -->
+            <div id="deleteModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+                <div style="position: relative; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 8px; width: 90%; max-width: 400px;">
+                    <h3 style="margin-bottom: 1rem;">Confirm Delete User</h3>
+                    <p style="margin-bottom: 1rem;">Please enter your admin password to confirm deletion.</p>
+                    <input type="password" id="adminPassword" placeholder="Enter admin password" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                    <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                        <button class="btn btn-primary" onclick="closeDeleteModal()">Cancel</button>
+                        <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check admin authentication
+        function checkAdminAuth() {
+            const role = localStorage.getItem('role');
+            if (role !== 'admin') {
+                window.location.href = '/';
+            }
+        }
+
+        // Show/Hide sections
+        function showSection(sectionName) {
+            document.getElementById('dashboard-section').style.display = 
+                sectionName === 'dashboard' ? 'block' : 'none';
+            document.getElementById('users-section').style.display = 
+                sectionName === 'users' ? 'block' : 'none';
+
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        // Fetch and display users
+        async function fetchUsers() {
+            try {
+                const response = await fetch('/api/v1/admin/users', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to fetch users');
+
+                const data = await response.json();
+                displayUsers(data.users);
+                updateStats(data.users);
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        }
+
+        // Display users in table
+        function displayUsers(users) {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '';
+
+            if (!users || users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center;">No users registered yet</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.phone}</td>
+                    <td>${user.referralCode}</td>
+                    <td>${user.referredBy || 'Admin'}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="showDeleteModal('${user.phone}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Update dashboard stats
+        function updateStats(users) {
+            document.getElementById('totalUsers').textContent = users.length;
+            
+            const today = new Date().toDateString();
+            const activeToday = users.filter(user => 
+                new Date(user.registrationDate).toDateString() === today
+            ).length;
+            document.getElementById('activeUsers').textContent = activeToday;
+
+            const totalReferrals = users.filter(user => 
+                user.referredBy && user.referredBy !== 'ADMIN'
+            ).length;
+            document.getElementById('totalReferrals').textContent = totalReferrals;
+        }
+
+        // Show message
+        function showMessage(message, type = 'error') {
+            const messageDiv = document.getElementById(`${type}Message`);
+            messageDiv.textContent = message;
+            messageDiv.style.display = 'block';
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Add delete modal functions
+        let userToDelete = null;
+
+        function showDeleteModal(phone) {
+            userToDelete = phone;
+            document.getElementById('deleteModal').style.display = 'block';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminPassword').focus();
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            userToDelete = null;
+        }
+
+        async function confirmDelete() {
+            const password = document.getElementById('adminPassword').value;
+            
+            if (!password) {
+                showMessage('Please enter admin password', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/v1/admin/users/${userToDelete}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ adminPassword: password })
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to delete user');
+                }
+
+                showMessage('User deleted successfully', 'success');
+                closeDeleteModal();
+                fetchUsers();
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        }
+
+        // Refresh all data
+        function refreshData() {
+            fetchUsers();
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('role');
+            window.location.href = '/';
+        }
+
+        // Initial load
+        checkAdminAuth();
+        fetchUsers();
+    </script>
+</body>
+</html> 

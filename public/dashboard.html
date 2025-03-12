@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wing System - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6C63FF;
+            --primary-gradient: linear-gradient(135deg, #8B7FFF 0%, #6C63FF 100%);
+            --primary-dark: #5A51E5;
+            --secondary-color: #FF6B9C;
+            --secondary-gradient: linear-gradient(135deg, #FF8FB2 0%, #FF6B9C 100%);
+            --accent-color: #00D1B2;
+            --accent-gradient: linear-gradient(135deg, #00F7D2 0%, #00D1B2 100%);
+            --success-color: #48C774;
+            --success-gradient: linear-gradient(135deg, #63E88F 0%, #48C774 100%);
+            --warning-color: #FFDD57;
+            --warning-gradient: linear-gradient(135deg, #FFE88A 0%, #FFDD57 100%);
+            --danger-color: #FF6B6B;
+            --danger-gradient: linear-gradient(135deg, #FF8F8F 0%, #FF6B6B 100%);
+            --text-dark: #2A2D3E;
+            --text-light: #7C8092;
+            --bg-light: #F0F2F9;
+            --bg-white: #ffffff;
+            --border-color: #E1E5EE;
+            --nav-height: 64px;
+            --nav-bottom-height: 60px;
+            --card-shadow: 0 4px 20px rgba(108, 99, 255, 0.1);
+            --hover-shadow: 0 8px 30px rgba(108, 99, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            padding-bottom: var(--nav-bottom-height);
+            line-height: 1.6;
+        }
+
+        /* Notification System */
+        .notification-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            width: 90%;
+            max-width: 350px;
+        }
+
+        .notification {
+            padding: 20px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            animation: slideIn 0.4s ease forwards;
+            transition: all 0.3s ease;
+            max-width: 400px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .notification.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .notification.info {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .notification.welcome {
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            padding: 28px 24px;
+            box-shadow: 0 8px 32px rgba(108, 99, 255, 0.35);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            color: white;
+            border: none;
+            animation: fadeIn 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            transform-origin: center;
+        }
+
+        .notification.welcome .phone-icon {
+            font-size: 24px;
+            color: white;
+            margin-bottom: 4px;
+            animation: iconFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .notification.welcome .notification-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .notification.welcome .bonus-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .notification.welcome .bonus-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.95);
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .notification.welcome .bonus-list li:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        .notification.welcome .bonus-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .notification.welcome .bonus-list li i {
+            font-size: 18px;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px;
+            border-radius: 8px;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification.welcome .got-it-btn {
+            background: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--primary-color);
+            margin-top: 12px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification.welcome .got-it-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .notification.welcome .got-it-btn:active {
+            transform: translateY(0);
+        }
+
+        .notification-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .notification.success .notification-icon {
+            color: var(--success-color);
+        }
+
+        .notification.error .notification-icon {
+            color: var(--danger-color);
+        }
+
+        .notification.warning .notification-icon {
+            color: var(--warning-color);
+        }
+
+        .notification.info .notification-icon {
+            color: var(--primary-color);
+        }
+
+        .notification-content {
+            flex-grow: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-dark);
+        }
+
+        .notification-message {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .notification-close {
+            color: var(--text-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+            margin: -4px;
+            transition: all 0.2s ease;
+        }
+
+        .notification-close:hover {
+            color: var(--text-dark);
+        }
+
+        .notification-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 0 0 4px 4px;
+            animation: progress 5s linear forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes progress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            backdrop-filter: blur(6px);
+            animation: fadeInOverlay 0.3s ease;
+        }
+
+        @keyframes fadeInOverlay {
+            from {
+                opacity: 0;
+                backdrop-filter: blur(0px);
+            }
+            to {
+                opacity: 1;
+                backdrop-filter: blur(6px);
+            }
+        }
+
+        /* Rest of your existing styles... */
+        .logo-image {
+            width: 100%;
+            height: 120px;
+            background-image: url('images/Wing.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            margin-bottom: 1rem;
+            display: block !important;
+        }
+
+        .content {
+            padding: 1rem;
+            min-height: calc(100vh - var(--nav-bottom-height));
+        }
+
+        /* Navigation Styles */
+        .bottom-nav {
+            background: white;
+            height: var(--nav-bottom-height);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.75rem;
+            padding: 0.5rem;
+            width: 25%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .nav-item:hover i {
+            transform: translateY(-2px);
+            color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item.active i {
+            transform: translateY(-2px);
+        }
+
+        /* Welcome Modal Styles */
+        .welcome-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .welcome-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+            box-shadow: var(--hover-shadow);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Page Styles */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .home-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            animation: fadeIn 0.5s ease-out;
+            position: relative;
+        }
+
+        .home-container::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(108, 99, 255, 0.1) 0%, rgba(108, 99, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .home-container::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 107, 156, 0.1) 0%, rgba(255, 107, 156, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .welcome-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.1);
+            border: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .welcome-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(108, 99, 255, 0.05) 0%, rgba(139, 127, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .welcome-header:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(108, 99, 255, 0.15);
+        }
+
+        .welcome-header:hover::before {
+            opacity: 1;
+        }
+
+        .welcome-header h1 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        .welcome-header p {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        /* Stats Grid Styles */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 0.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.08);
+            border: none;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            min-width: 100px;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+            opacity: 1;
+            transition: height 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.15);
+        }
+
+        .stat-card:hover::before {
+            height: 100%;
+            opacity: 0.1;
+        }
+
+        .stat-card h3 {
+            color: var(--primary-color);
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: -0.01em;
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card:hover h3 {
+            transform: translateY(-2px);
+            color: var(--primary-dark);
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .stat-card .description {
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 8px 16px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .welcome-header {
+                padding: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .welcome-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .welcome-header p {
+                font-size: 1.1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.8rem;
+                padding: 0;
+            }
+
+            .stat-card {
+                padding: 0.8rem;
+            }
+
+            .stat-card h3 {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                gap: 0.5rem;
+            }
+
+            .stat-card {
+                padding: 0.7rem;
+            }
+
+            .stat-card h3 {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <main class="content">
+        <div class="logo-image"></div>
+
+        <!-- Home Page -->
+        <div id="homePage" class="page active">
+            <div class="home-container">
+                <div class="welcome-header">
+                    <h1>Welcome Back!</h1>
+                    <p>Track your earnings and referrals</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Basic Package</h3>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Pro Package</h3>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Premium Package</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings Page -->
+        <div id="earn" class="page">
+            <div class="home-container">
+                <h2>Your Earnings</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Referral Earnings</h3>
+                        <div class="value">RS 0</div>
+                        <div class="stat-footer">
+                            From 0 active referrals
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <h3>Total Earnings</h3>
+                        <div class="value">RS 150</div>
+                        <div class="stat-footer">
+                            Including registration bonus
+                        </div>
+                    </div>
+                </div>
+                <div class="earn-section">
+                    <button id="earnButton" class="earn-button" onclick="handleEarnClick()">
+                        <i class="fas fa-hand-pointer"></i>
+                        <span>Click to Earn</span>
+                    </button>
+                    <div class="timer-container">
+                        <div id="countdown" class="countdown">24:00:00</div>
+                        <div class="timer-label">Time until next reward</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invite Page -->
+        <div id="referral" class="page">
+            <div class="home-container">
+                <h2>Invite Friends</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Your Referral Code</h3>
+                        <div class="value" style="font-size: 1.2rem;">ABC123</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Referrals</h3>
+                        <div class="value">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Referral Earnings</h3>
+                        <div class="value">RS 0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile" class="page">
+            <div class="home-container">
+                <h2>My Profile</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Phone Number</h3>
+                        <div class="value" style="font-size: 1.2rem;">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Join Date</h3>
+                        <div class="value" style="font-size: 1.2rem;">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Account Status</h3>
+                        <div class="value" style="font-size: 1.2rem;">Active</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item active" onclick="showPage('home')">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" onclick="showPage('earn')">
+            <i class="fas fa-coins"></i>
+            <span>Earn</span>
+        </a>
+        <a class="nav-item" onclick="showPage('referral')">
+            <i class="fas fa-users"></i>
+            <span>Referral</span>
+        </a>
+        <a class="nav-item" onclick="showPage('profile')">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+        // Notification System
+        function showNotification(title, message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            let icon;
+            switch(type) {
+                case 'success':
+                    icon = 'fa-check-circle';
+                    break;
+                case 'error':
+                    icon = 'fa-times-circle';
+                    break;
+                case 'warning':
+                    icon = 'fa-exclamation-circle';
+                    break;
+                default:
+                    icon = 'fa-info-circle';
+            }
+
+            notification.innerHTML = `
+                <i class="fas ${icon} notification-icon"></i>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="notification-progress"></div>
+            `;
+
+            container.appendChild(notification);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        // Navigation
+        function showPage(pageId) {
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Show welcome notification if on home page
+            if (pageId === 'home') {
+                showWelcomeNotification();
+            }
+
+            // Update page display
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId + 'Page').classList.add('active');
+        }
+
+        function showWelcomeNotification() {
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            document.body.appendChild(overlay);
+
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = 'notification welcome';
+            
+            notification.innerHTML = `
+                <i class="fas fa-mobile-alt phone-icon"></i>
+                <div class="notification-title">Welcome to Wing System!</div>
+                <div class="notification-message">
+                    <ul class="bonus-list">
+                        <li><i class="fas fa-gift"></i>Registration bonus: RS 150</li>
+                        <li><i class="fas fa-users"></i>Invite user to invest, and you can get 10% cash bonus</li>
+                        <li><i class="fas fa-star"></i>Wing System is the best platform in Pakistan, join us and earn today</li>
+                    </ul>
+                </div>
+                <button class="got-it-btn" onclick="closeWelcomeNotification(this)">Got it!</button>
+            `;
+
+            container.appendChild(notification);
+        }
+
+        function closeWelcomeNotification(button) {
+            const notification = button.closest('.notification');
+            const overlay = document.querySelector('.modal-overlay');
+            
+            if (notification) {
+                notification.remove();
+            }
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+
+        // Earnings Functions
+        function startCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            const earnButton = document.getElementById('earnButton');
+            const currentPhone = localStorage.getItem('currentPhone');
+            
+            if (!currentPhone || !countdownElement || !earnButton) return;
+
+            const userKey = `user_${currentPhone}`;
+            const userData = JSON.parse(localStorage.getItem(userKey));
+            
+            if (!userData) return;
+
+            // Update earnings display
+            const earningsDisplay = document.querySelector('#earn .stat-card:last-child .value');
+            if (earningsDisplay) {
+                earningsDisplay.textContent = `RS ${userData.earnings}`;
+            }
+
+            const now = Date.now();
+            const lastClickTime = userData.lastClickTime;
+            const cooldownPeriod = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+            const timeElapsed = lastClickTime ? now - lastClickTime : cooldownPeriod;
+
+            if (timeElapsed < cooldownPeriod && lastClickTime) {
+                // If cooldown period hasn't elapsed, start countdown from remaining time
+                const remainingTime = cooldownPeriod - timeElapsed;
+                startTimer(remainingTime, currentPhone);
+                earnButton.style.display = 'none';
+            } else {
+                // If cooldown period has elapsed, show button and full time
+                earnButton.style.display = 'flex';
+                countdownElement.textContent = '24:00:00';
+            }
+        }
+
+        function startTimer(duration, phone) {
+            const countdownElement = document.getElementById('countdown');
+            const earnButton = document.getElementById('earnButton');
+            
+            if (!countdownElement || !earnButton) return;
+
+            function updateTimer() {
+                const hours = Math.floor(duration / (1000 * 60 * 60));
+                const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((duration % (1000 * 60)) / 1000);
+
+                countdownElement.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                if (duration <= 0) {
+                    clearInterval(timerInterval);
+                    earnButton.style.display = 'flex';
+                    countdownElement.textContent = '24:00:00';
+                    
+                    // Clear the last click time when timer expires
+                    const userKey = `user_${phone}`;
+                    const userData = JSON.parse(localStorage.getItem(userKey));
+                    if (userData) {
+                        userData.lastClickTime = null;
+                        localStorage.setItem(userKey, JSON.stringify(userData));
+                    }
+                } else {
+                    duration -= 1000;
+                }
+            }
+
+            updateTimer();
+            const timerInterval = setInterval(updateTimer, 1000);
+            return timerInterval;
+        }
+
+        function handleEarnClick() {
+            const earnButton = document.getElementById('earnButton');
+            const currentPhone = localStorage.getItem('currentPhone');
+            
+            if (!currentPhone || !earnButton) return;
+
+            const userKey = `user_${currentPhone}`;
+            const userData = JSON.parse(localStorage.getItem(userKey));
+            
+            if (!userData) return;
+
+            // Update user data
+            userData.lastClickTime = Date.now();
+            userData.earnings += 50;
+            localStorage.setItem(userKey, JSON.stringify(userData));
+            
+            // Update display
+            const earningsDisplay = document.querySelector('#earn .stat-card:last-child .value');
+            if (earningsDisplay) {
+                earningsDisplay.textContent = `RS ${userData.earnings}`;
+            }
+            
+            // Hide button and start countdown
+            earnButton.style.display = 'none';
+            startTimer(24 * 60 * 60 * 1000, currentPhone);
+
+            // Show reward alert
+            alert('Congratulations! You have received RS 50 as your daily reward!');
+        }
+
+        // Profile Functions
+        function updateProfileInfo() {
+            const currentPhone = localStorage.getItem('currentPhone');
+            if (!currentPhone) return;
+
+            const userKey = `user_${currentPhone}`;
+            const userData = JSON.parse(localStorage.getItem(userKey));
+            
+            if (userData) {
+                const phoneElement = document.querySelector('#profile .stat-card:first-child .value');
+                const dateElement = document.querySelector('#profile .stat-card:nth-child(2) .value');
+                
+                if (phoneElement) {
+                    phoneElement.textContent = userData.phone;
+                }
+                if (dateElement) {
+                    dateElement.textContent = userData.joinDate || '-';
+                }
+            }
+        }
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPhone = localStorage.getItem('currentPhone');
+            if (!currentPhone) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Initialize user data if needed
+            const userKey = `user_${currentPhone}`;
+            let userData = JSON.parse(localStorage.getItem(userKey));
+            if (!userData) {
+                userData = {
+                    id: currentPhone,
+                    phone: currentPhone,
+                    earnings: 150,
+                    lastClickTime: null,
+                    joinDate: new Date().toISOString().split('T')[0]
+                };
+                localStorage.setItem(userKey, JSON.stringify(userData));
+            }
+
+            // Show welcome notification
+            showWelcomeNotification();
+        });
+
+        function purchasePackage(packageId, amount) {
+            const currentPhone = localStorage.getItem('currentPhone');
+            if (!currentPhone) {
+                alert('Please login first!');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to purchase this package for RS ${amount}?`)) {
+                const userKey = `user_${currentPhone}`;
+                const userData = JSON.parse(localStorage.getItem(userKey));
+                
+                if (userData) {
+                    userData.package = packageId;
+                    userData.packageAmount = amount;
+                    userData.purchaseDate = new Date().toISOString();
+                    localStorage.setItem(userKey, JSON.stringify(userData));
+                    alert('Package purchased successfully!');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
