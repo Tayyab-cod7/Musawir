@@ -12,18 +12,6 @@
 </head>
 
 <body>
-    <!-- 📢 Full-Screen Notification (Initially Shown) -->
-    <div id="notificationOverlay" class="notification-overlay">
-        <div class="notification-box">
-            <div class="notification-title">🎉 Welcome to Wing Network!</div>
-            <div class="notification-message">
-                1. Registration bonus: <b>RS 150.00</b> <br>
-                2. Invite people to invest & earn <b>10% cash bonus</b>. <br>
-                3. Wing Network is the <b>best platform in Pakistan</b>, join us today!
-            </div>
-            <button class="close-btn" onclick="closeNotification()">Got it</button>
-        </div>
-    </div>
 
     <!-- 🔹 Main Content (Initially Hidden) -->
     <div id="mainContent" style="display: none;">
@@ -45,10 +33,10 @@
                 </div>
                 
                 <div class="stats-grid">
-                    <div id="active" class="stat-card" onclick="window.location.href='dashboard.html'">
+                    <div  class="stat-card" onclick="window.location.href='dashboard.html'">
                         <h3>Basic Package</h3>
                     </div>
-                    <div class="stat-card " onclick="window.location.href='pro.html'">
+                    <div id="active" class="stat-card " onclick="window.location.href='pro.html'">
                         <h3>Pro Package</h3>
                     </div>
                     <div class="stat-card " onclick="window.location.href='premium.html'">
@@ -67,9 +55,9 @@
                         <!-- Basic Plan 1 -->
                         <div class="plan-card fade-in">
                             <div class="plan-card-icon"><i class="fas fa-seedling"></i></div>
-                            <h3>Basic Plan 1</h3>
-                            <div class="plan-card-price"><s>RS 600</s> <b>RS 500</b> (10% OFF)</div>
-                            <div class="plan-card-earning">Daily Income: RS 75</div>
+                            <h3>Pro Plan 1</h3>
+                            <div class="plan-card-price"><s>RS 3500</s> <b>RS 3000</b> (10% OFF)</div>
+                            <div class="plan-card-earning">Daily Income: RS 500</div>
                             <div class="plan-card-validity">Valid for: 30 Days</div>
                             <div class="button-group">
                                 <button class="invest-btn" onclick="return false;">Invest Now</button>
@@ -79,9 +67,9 @@
                         <!-- Basic Plan 2 -->
                         <div class="plan-card fade-in">
                             <div class="plan-card-icon"><i class="fas fa-leaf"></i></div>
-                            <h3>Basic Plan 2</h3>
-                            <div class="plan-card-price"><s>RS 1200</s> <b>RS 1000</b> (10% OFF)</div>
-                            <div class="plan-card-earning">Daily Income: RS 150</div>
+                            <h3>Pro Plan 2</h3>
+                            <div class="plan-card-price"><s>RS 6000</s> <b>RS 5000</b> (10% OFF)</div>
+                            <div class="plan-card-earning">Daily Income: RS 650</div>
                             <div class="plan-card-validity">Valid for: 30 Days</div>
                             <div class="button-group">
                                 <button class="invest-btn" onclick="return false;">Invest Now</button>
@@ -91,21 +79,9 @@
                         <!-- Basic Plan 3 -->
                         <div class="plan-card fade-in">
                             <div class="plan-card-icon"><i class="fas fa-tree"></i></div>
-                            <h3>Basic Plan 3</h3>
-                            <div class="plan-card-price"><s>RS 1700</s> <b>RS 1500</b> (10% OFF)</div>
-                            <div class="plan-card-earning">Daily Income: RS 255</div>
-                            <div class="plan-card-validity">Valid for: 30 Days</div>
-                            <div class="button-group">
-                                <button class="invest-btn" onclick="return false;">Invest Now</button>
-                            </div>
-                        </div>
-
-                        <!-- Basic Plan 4 -->
-                        <div class="plan-card fade-in">
-                            <div class="plan-card-icon"><i class="fas fa-cannabis"></i></div>
-                            <h3>Basic Plan 4</h3>
-                            <div class="plan-card-price"><s>RS 2400</s> <b>RS 2000</b> (10% OFF)</div>
-                            <div class="plan-card-earning">Daily Income: RS 300</div>
+                            <h3>Pro Plan 3</h3>
+                            <div class="plan-card-price"><s>RS 8500</s> <b>RS 7500</b> (10% OFF)</div>
+                            <div class="plan-card-earning">Daily Income: RS 800</div>
                             <div class="plan-card-validity">Valid for: 30 Days</div>
                             <div class="button-group">
                                 <button class="invest-btn" onclick="return false;">Invest Now</button>
@@ -114,6 +90,7 @@
 
                     </div>
                 </div>
+
             </div>
         </div>
     </main>

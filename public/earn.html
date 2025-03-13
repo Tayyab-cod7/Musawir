@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earn</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="earn.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- 🟡 Ramadan Banner -->
+    <div class="ramadan-banner">🔥 10% OFF Ramadan Special Offer! <span class="limited-time">⏳ Limited Time Only!</span></div>
+
+    <main class="content">
+        <!-- 📊 Earnings Summary -->
+        <section class="earnings-summary">
+            <div class="earning-box">
+                <h3>Program Earnings</h3>
+                <p>RS <span id="programEarnings">0</span></p>
+            </div>
+            <div class="earning-box">
+                <h3>Referral Earnings</h3>
+                <p>RS <span id="referralEarnings">0</span></p>
+            </div>
+            <div class="earning-box">
+                <h3>Total Earnings</h3>
+                <p>RS <span id="totalEarnings">150</span></p> <!-- Default 150 -->
+            </div>
+            <button class="withdraw-btn">Withdraw Earnings</button>
+        </section>
+        <button id="earnButton" class="earn-btn">Click to Earn</button>
+    </main>
+
+    <!-- 📌 Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item" href="dashboard.html"><i class="fas fa-home"></i><span>Home</span></a>
+        <a class="nav-item active" href="earn.html"><i class="fas fa-coins"></i><span>Earn</span></a>
+        <a class="nav-item" href="referral.html"><i class="fas fa-users"></i><span>Referral</span></a>
+        <a class="nav-item" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a>
+    </nav>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    alert("Please log in first!");
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                // Fetch user earnings
+                const response = await fetch("http://localhost:3005/api/v1/user/earnings", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    document.getElementById("totalEarnings").textContent = data.earnings;
+                    document.getElementById("referralEarnings").textContent = data.referralEarnings || 0;
+                    document.getElementById("programEarnings").textContent = data.programEarnings || 0;
+                } else {
+                    console.error("Error fetching earnings:", data.message);
+                }
+            } catch (error) {
+                console.error("Error loading earnings:", error);
+            }
+        });
+
+        // 🟢 Click to Earn Button Logic
+        document.getElementById("earnButton").addEventListener("click", async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    alert("Please log in first!");
+                    return;
+                }
+
+                const response = await fetch("http://localhost:3005/api/v1/user/earn-50", {  
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    alert("You earned 50 RS! 🎉");
+                    document.getElementById("totalEarnings").textContent = data.earnings;
+                    document.getElementById("programEarnings").textContent = data.programEarnings;
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error("Error adding earnings:", error);
+            }
+        });
+    </script>
+
+</body>
+</html>

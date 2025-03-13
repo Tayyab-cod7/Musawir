@@ -1,0 +1,476 @@
+:root {
+    --primary-color: #6C63FF;
+    --primary-gradient: linear-gradient(135deg, #8B7FFF 0%, #6C63FF 100%);
+    --primary-dark: #5A51E5;
+    --secondary-color: #FF6B9C;
+    --accent-color: #00D1B2;
+    --success-color: #48C774;
+    --warning-color: #FFDD57;
+    --danger-color: #FF6B6B;
+    --text-dark: #2A2D3E;
+    --text-light: #7C8092;
+    --bg-light: #F0F2F9;
+    --bg-white: #ffffff;
+    --border-color: #E1E5EE;
+    --nav-bottom-height: 60px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    padding-bottom: var(--nav-bottom-height);
+    line-height: 1.6;
+}
+
+/* Main Content */
+.content {
+    padding: 1.5rem;
+    min-height: calc(100vh - var(--nav-bottom-height));
+}
+
+/* Welcome Header */
+.welcome-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(108, 99, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.welcome-header:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(108, 99, 255, 0.3);
+}
+
+.welcome-header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.welcome-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Package Selection */
+.package-details {
+    display: none;
+    margin-top: 20px;
+}
+
+.package-details.active {
+    display: block;
+}
+
+.stats-grid .stat-card.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Package Plans */
+.plan-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.plan-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.plan-card-icon {
+    font-size: 3rem;
+    margin-right: 20px;
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+}
+
+.plan-card:hover .plan-card-icon {
+    color: var(--primary-dark);
+}
+
+.plan-card-price {
+    font-weight: bold;
+    color: var(--success-color);
+    font-size: 1.2rem;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    background: white;
+    height: var(--nav-bottom-height);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+    width: 25%;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.nav-item i {
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.nav-item:hover i {
+    transform: translateY(-2px);
+    color: var(--primary-color);
+}
+
+.nav-item.active {
+    color: var(--primary-color);
+}
+
+.nav-item.active i {
+    transform: translateY(-2px);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .welcome-header {
+        padding: 1.5rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .plan-card {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .plan-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+
+    .plan-card-icon {
+        margin-bottom: 10px;
+    }
+}
+
+    /* 🔹 Full-Screen Notification */
+    .notification-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .notification-box {
+        background: white;
+        width: 90%;
+        max-width: 450px;
+        padding: 25px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.3s ease-in-out;
+    }
+
+    .notification-title {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #6C63FF;
+    }
+
+    .notification-message {
+        font-size: 1.2rem;
+        color: #333;
+        margin-top: 12px;
+        line-height: 1.5;
+    }
+
+    .close-btn {
+        background: #6C63FF;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 1rem;
+        margin-top: 15px;
+        cursor: pointer;
+        border: none;
+        transition: 0.2s;
+    }
+
+    .close-btn:hover {
+        background: #5548d9;
+    }
+
+    /* 🔹 Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* 🔹 Background Image for Home Page (Only on Top) */
+#homePage {
+    position: relative;
+    background: url('/images/Wing.png') no-repeat center top;
+    background-size: 200px auto; /* Adjust width (change 200px if needed) */
+    background-position: center 20px; /* Move it slightly down */
+    padding-top: 180px; /* Adjust space below image */
+}
+
+/* 🌟 Center Package Section */
+#basicPackageDetails {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Center it vertically */
+    width: 100%;
+}
+
+/* 🌟 Package Grid - Two Per Row with Equal Spacing */
+.plan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Auto-fit for perfect spacing */
+    gap: 70px; /* Equal space between all cards */
+    justify-content: center;
+    padding: 30px;
+    max-width: 900px; /* Ensures balanced layout */
+    margin: 0 auto; /* Centers the grid */
+}
+
+/* 🌟 Package Card */
+.plan-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+    border-radius: 15px;
+    background: var(--bg-white);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    border: 3px solid var(--primary-color);
+    max-width: 400px; /* Ensures uniform size */
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+
+/* 🌟 Hover Effect */
+.plan-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border-color: var(--primary-dark);
+}
+
+/* 🌟 Package Icon */
+.plan-card-icon {
+    font-size: 4rem; /* Bigger Icon */
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+}
+
+.plan-card:hover .plan-card-icon {
+    color: var(--primary-dark);
+}
+
+/* 🌟 Package Title */
+.plan-card h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* 🌟 Package Price */
+.plan-card-price {
+    font-weight: bold;
+    color: var(--success-color);
+    font-size: 1.3rem;
+    margin: 10px 0;
+}
+
+/* 🌟 Daily Earnings */
+.plan-card-earning {
+    font-size: 1.1rem;
+    color: var(--text-light);
+}
+
+/* 🌟 Package Validity */
+.plan-card-validity {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 20px;
+}
+
+/* 🌟 Button Group */
+.button-group {
+    display: flex;
+    gap: 15px; /* More space between buttons */
+    width: 100%;
+    justify-content: center;
+}
+
+/* 🌟 "Invest Now" & "Cancel" Buttons */
+.invest-btn, .cancel-btn {
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    width: 50%;
+    text-align: center;
+}
+
+/* 🌟 Invest Button (Does Nothing) */
+.invest-btn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.invest-btn:hover {
+    background: var(--primary-dark);
+}
+
+/* 🌟 Cancel Button */
+.cancel-btn {
+    background: var(--danger-color);
+    color: white;
+}
+
+.cancel-btn:hover {
+    background: darkred;
+}
+
+/* 🌟 Responsive Design - One Per Row on Small Screens */
+@media (max-width: 768px) {
+    .plan-grid {
+        grid-template-columns: 1fr; /* One package per row */
+        gap: 30px;
+    }
+}
+
+#active {
+    background-color: #6C63FF;
+}
+
+/* 🌙 Ramadan Discount Banner - Softer & Elegant */
+.ramadan-banner {
+    background: linear-gradient(90deg, #FAD02E, #E5A823); /* Softer Gold */
+    color: #333; /* Darker Text for readability */
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    margin-bottom: 20px;
+    animation: fadeIn 0.6s ease-in-out;
+    position: relative;
+}
+
+/* ⚡ Limited Time Badge */
+.ramadan-banner::after {
+    content: "⏳ Limited Time Only!";
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #D9534F; /* Soft Red */
+    color: white;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+/* 🔥 Smooth Fade-In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

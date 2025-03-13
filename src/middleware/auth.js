@@ -1,51 +1,43 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-exports.protect = async (req, res, next) => {
+const protect = async (req, res, next) => {
     try {
-        let token;
-        
-        // Get token from header
-        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-            token = req.headers.authorization.split(' ')[1];
-        }
+        let token = req.headers.authorization?.split(" ")[1];
+
+        console.log("🔍 Received Token:", token); // ✅ Debugging: See if token is received
 
         if (!token) {
             return res.status(401).json({
-                status: 'error',
-                message: 'Not authorized to access this route'
+                status: "error",
+                message: "Not authorized, no token",
             });
         }
 
-        try {
-            // Verify token
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            const user = await User.findById(decoded.id);
+        // Verify token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("✅ Decoded Token:", decoded); // ✅ Debugging: Check token content
 
-            if (!user) {
-                return res.status(401).json({
-                    status: 'error',
-                    message: 'User not found'
-                });
-            }
+        const user = await User.findById(decoded.id).select("-password");
+        console.log("👤 User Found:", user ? user.phone : "Not Found"); // ✅ Debugging: Check if user exists
 
-            // Check if user is admin (using the phone number)
-            if (user.phone !== '03151251123') {
-                return res.status(403).json({
-                    status: 'error',
-                    message: 'Not authorized to access admin routes'
-                });
-            }
-
-            req.user = user;
-            next();
-        } catch (err) {
+        if (!user) {
             return res.status(401).json({
-                status: 'error',
-                message: 'Not authorized to access this route'
+                status: "error",
+                message: "User not found",
             });
         }
+
+        req.user = user; // Attach user data to request
+        next();
     } catch (error) {
-        next(error);
+        console.error("❌ Token Verification Error:", error.message); // ✅ Debugging: Log errors
+
+        return res.status(401).json({
+            status: "error",
+            message: "Invalid token",
+        });
     }
-}; 
+};
+
+module.exports = { protect };

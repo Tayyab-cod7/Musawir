@@ -35,6 +35,14 @@ const userSchema = new mongoose.Schema({
             'Referral code must be 6 digits'
         ]
     },
+    earnings: {
+        type: Number,
+        default: 150 // Set to 0 initially, user must claim the bonus manually
+    },
+    bonusClaimed: {
+        type: Boolean,
+        default: false // 🟢 New field: Tracks if the user has claimed the 150 RS bonus
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -67,10 +75,12 @@ userSchema.methods.matchPassword = async function(enteredPassword) {
     }
 };
 
+
+
 // Define indexes
 userSchema.index({ phone: 1 }, { unique: true });
 userSchema.index({ referralCode: 1 }, { unique: true });
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User; 
+module.exports = User;

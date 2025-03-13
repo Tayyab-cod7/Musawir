@@ -1,0 +1,28 @@
+    
+        <!-- 📜 Earnings History -->
+        <section class="earnings-history">
+            <h2>Earnings History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="earningsTable">
+                    <tr>
+                        <td>March 15, 2025</td>
+                        <td>RS 100</td>
+                        <td class="completed">Completed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 🔗 Referral Bonus Section -->
+        <section class="referral-section">
+            <h2>Refer & Earn</h2>
+            <p>Invite friends and get 10% bonus on their earnings.</p>
+            <button class="invite-btn">Invite Now</button>
+        </section>
